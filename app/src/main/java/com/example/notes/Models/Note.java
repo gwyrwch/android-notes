@@ -22,8 +22,7 @@ public class Note {
 
     public Date addedDate;
 
-    public Note(int id, String title, String body) {
-        this.id = id;
+    public Note(String title, String body) {
 
         Date currentTime = Calendar.getInstance().getTime();
         this.addedDate = currentTime;
