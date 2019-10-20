@@ -1,9 +1,11 @@
 package com.example.notes.Database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.notes.Models.Note;
 
@@ -17,12 +19,15 @@ public interface NoteDao {
     @Insert
     void insert(Note note);
 
+    @Update
+    void update(Note note);
+
     @Delete
     void delete(Note note);
 
     @Query("SELECT * FROM notes ORDER BY notes.title")
-    List<Note> sortByTitle();
+    LiveData<List<Note>> sortByTitle();
 
     @Query("SELECT * FROM notes ORDER BY notes.addedDate")
-    List<Note> sortByDate();
+    LiveData<List<Note>> sortByDate();
 }

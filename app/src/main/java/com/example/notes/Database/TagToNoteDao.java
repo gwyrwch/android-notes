@@ -19,5 +19,5 @@ public interface TagToNoteDao {
 //            "ON notes.note_id=tag_to_note.note_id " +
 //            "WHERE tag_to_note.tag_id=:tagId"
 //    )
-//    List<Note> getNotesByTag(final int tagId);
+//    LiveData<List<Note>> getNotesByTag(final int tagId);
 }

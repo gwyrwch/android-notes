@@ -14,7 +14,7 @@ import java.util.Locale;
 
 @Entity(tableName = "notes", indices = {@Index("note_id")})
 public class Note {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_id")
     public int id;
 
