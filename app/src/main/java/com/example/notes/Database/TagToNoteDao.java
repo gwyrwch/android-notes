@@ -16,8 +16,8 @@ public interface TagToNoteDao {
 
 //    @Query("SELECT * FROM notes " +
 //            "INNER JOIN tag_to_note " +
-//            "ON notes.note_id=tag_to_note.noteId " +
-//            "WHERE tag_to_note.tagId=:tagId"
+//            "ON notes.note_id=tag_to_note.note_id " +
+//            "WHERE tag_to_note.tag_id=:tagId"
 //    )
 //    List<Note> getNotesByTag(final int tagId);
 }
