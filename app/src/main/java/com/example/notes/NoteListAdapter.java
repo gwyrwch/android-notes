@@ -12,6 +12,7 @@ import com.example.notes.Models.Note;
 
 import java.util.List;
 
+
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteViewHolder> {
     class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView noteItemView;
@@ -19,6 +20,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         private NoteViewHolder(View itemView) {
             super(itemView);
             noteItemView = itemView.findViewById(R.id.textView);
+
         }
     }
 
@@ -32,7 +34,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
 
     @Override
     public NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = inflater.inflate(R.layout.activity_main, parent, false);
+        View itemView = inflater.inflate(R.layout.recyclerview_item, parent, false);
         return new NoteViewHolder(itemView);
     }
 
