@@ -15,9 +15,10 @@ import com.example.notes.utilities.Converters;
 @Database(entities = {Note.class, TagToNote.class, Tag.class}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class NoteDatabase extends RoomDatabase {
-    public abstract TagToNoteDao tagToNoteDao();
     public abstract NoteDao noteDao();
     public abstract TagDao tagDao();
+    public abstract TagToNoteDao tagToNoteDao();
+
 
     private static volatile NoteDatabase INSTANCE;
 

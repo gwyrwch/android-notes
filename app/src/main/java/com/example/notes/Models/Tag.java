@@ -13,7 +13,8 @@ public class Tag {
 
     public String tagName;
 
-    public Tag(int id) {
+    public Tag(int id, String tagName) {
         this.id = id;
+        this.tagName = tagName;
     }
 }
