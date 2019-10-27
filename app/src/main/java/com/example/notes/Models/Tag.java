@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 public class Tag {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "tag_id")
-    public int id;
+    public long id;
 
     public String tagName;
 

@@ -9,7 +9,9 @@ import com.example.notes.Database.NoteDatabase;
 import com.example.notes.Database.TagDao;
 import com.example.notes.Models.Tag;
 
+import java.io.Console;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class TagRepository {
     private TagDao tagDao;
@@ -22,7 +24,7 @@ public class TagRepository {
     }
 
     public LiveData<List<Tag>> getAllTags() {
-        return  allTags;
+        return allTags;
     }
 
     public void insert(Tag tag) {
@@ -38,7 +40,7 @@ public class TagRepository {
 
         @Override
         protected Void doInBackground(final Tag... params) {
-            asyncTagDao.insert(params[0]);
+            params[0].id = asyncTagDao.insert(params[0]);
             return null;
         }
     }
@@ -58,6 +60,31 @@ public class TagRepository {
         protected Void doInBackground(final Tag... params) {
             asyncTagDao.delete(params[0]);
             return null;
+        }
+    }
+
+    public Tag getTagByTitle(String title) {
+        AsyncTask<String, Void, Tag> task = new getTagByTitleAsyncTask(tagDao).execute(title);
+        Tag result = null;
+        try {
+            result = task.get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    private static class getTagByTitleAsyncTask extends AsyncTask<String, Void, Tag> {
+        private TagDao asyncTagDao;
+
+        getTagByTitleAsyncTask(TagDao dao) {
+            asyncTagDao = dao;
+        }
+
+        @Override
+        protected Tag doInBackground(final String... params) {
+            return asyncTagDao.getTagByTitle(params[0]);
         }
     }
 

@@ -15,12 +15,12 @@ import java.util.List;
 
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteViewHolder> {
     class NoteViewHolder extends RecyclerView.ViewHolder {
-        private final TextView noteItemView;
+        private final TextView noteTitleItemView, noteBodyItemView;
 
         private NoteViewHolder(View itemView) {
             super(itemView);
-            noteItemView = itemView.findViewById(R.id.textView);
-
+            noteTitleItemView = itemView.findViewById(R.id.titleTextView);
+            noteBodyItemView = itemView.findViewById(R.id.bodyTextView);
         }
     }
 
@@ -42,10 +42,11 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     public void onBindViewHolder(NoteViewHolder holder, int position) {
         if (notes != null) {
             Note current = notes.get(position);
-            holder.noteItemView.setText(current.title);
+            holder.noteTitleItemView.setText(current.title);
+            holder.noteBodyItemView.setText(current.body);
         } else {
             // Covers the case of data not being ready yet.
-            holder.noteItemView.setText("No Word");
+            holder.noteTitleItemView.setText("No Word");
         }
     }
 

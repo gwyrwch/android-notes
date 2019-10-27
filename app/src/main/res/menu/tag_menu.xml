@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/search"
+        android:icon="@drawable/baseline_note_add_24"
+        android:title="kek"/>
+    <item android:id="@+id/help"
+        android:icon="@drawable/baseline_note_add_24"
+        android:title="mda" />
+</menu>

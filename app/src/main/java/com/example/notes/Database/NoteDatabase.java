@@ -53,25 +53,37 @@ public abstract class NoteDatabase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
     private final NoteDao mDao;
+    private final TagDao tDao;
+    private final TagToNoteDao tnDao;
 
     PopulateDbAsync(NoteDatabase db) {
         mDao = db.noteDao();
+        tDao = db.tagDao();
+        tnDao = db.tagToNoteDao();
     }
 
     @Override
     protected Void doInBackground(final Void... params) {
         // Start the app with a clean database every time.
         // Not needed if you only populate on creation.
+        tnDao.deleteAll();
         mDao.deleteAll();
+        tDao.deleteAll();
 
         Note note = new Note("title1", "body1");
-        mDao.insert(note);
+        note.id = mDao.insert(note);
         note = new Note("title2", "body2");
-        mDao.insert(note);
+        note.id = mDao.insert(note);
         note = new Note("title3", "body3");
-        mDao.insert(note);
+        note.id = mDao.insert(note);
         note = new Note("title4", "body4");
-        mDao.insert(note);
+        note.id = mDao.insert(note);
+
+        Tag tag = new Tag("tag1");
+        tag.id = tDao.insert(tag);
+
+
+        tnDao.insert(new TagToNote(tag.id, note.id));
 
         return null;
     }

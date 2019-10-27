@@ -11,14 +11,19 @@ import com.example.notes.Models.Tag;
 import com.example.notes.Repositories.NoteRepository;
 import com.example.notes.Repositories.TagRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TagViewModel extends AndroidViewModel {
     private TagRepository tagRepository;
     private LiveData<List<Tag>> allTags;
 
+    public List<String> selectedTitles;
+
     public TagViewModel(Application application) {
         super(application);
+
+        selectedTitles = new ArrayList<>();
 
         tagRepository = new TagRepository(application);
         allTags = tagRepository.getAllTags();
@@ -28,11 +33,22 @@ public class TagViewModel extends AndroidViewModel {
         return allTags;
     }
 
-    void insert(Tag tag) {
+    public void insert(Tag tag) {
         tagRepository.insert(tag);
     }
 
-    void delete(Tag tag) {
+    public void delete(Tag tag) {
         tagRepository.delete(tag);
+    }
+
+    public boolean addNewTitle(String title) {
+        if (selectedTitles.contains(title)) {
+            return false;
+        }
+        return selectedTitles.add(title);
+    }
+
+    public Tag getTagByTitle(String title) {
+        return tagRepository.getTagByTitle(title);
     }
 }

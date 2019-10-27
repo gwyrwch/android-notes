@@ -11,45 +11,66 @@ import com.example.notes.Models.Note;
 import com.example.notes.Models.Tag;
 import com.example.notes.Models.TagToNote;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class TagToNoteRepository {
     private TagToNoteDao tagToNoteDao;
-    private LiveData<List<Tag>> tagsFromNote;
-    private LiveData<List<Note>> notesByTag;
 
-    public TagToNoteRepository(Application application, int tagId, int noteId) {
+    public TagToNoteRepository(Application application) {
         NoteDatabase db = NoteDatabase.getDatabase(application);
         tagToNoteDao = db.tagToNoteDao();
-        tagsFromNote = tagToNoteDao.getTagsFromNote(noteId);
-        notesByTag = tagToNoteDao.getNotesByTag(tagId);
-
     }
 
-    public LiveData<List<Tag>> getTagsFromNote() {
-        return tagsFromNote;
+    public LiveData<List<Tag>> getTagsFromNote(long noteId) {
+        return tagToNoteDao.getTagsFromNote(noteId);
     }
 
-    public LiveData<List<Note>> getNotesByTag() {
-        return notesByTag;
+    public LiveData<List<Note>> getNotesByTag(long tagId) {
+        return tagToNoteDao.getNotesByTag(tagId);
     }
 
-
-    public void insert(TagToNote tagToNote) {
-        new TagToNoteRepository.insertAsyncTask(tagToNoteDao).execute(tagToNote);
+    public void insert(final long tagId, final long nodeId) {
+        new TagToNoteRepository.insertAsyncTask(tagToNoteDao, null).execute(
+            new ArrayList<Long>() {
+                {
+                    add(tagId);
+                    add(nodeId);
+                }
+            }
+        );
     }
 
+    public void insert(final long tagId, AsyncTask<Note, Void, Note> noteInsertion) {
+        new TagToNoteRepository.insertAsyncTask(tagToNoteDao, noteInsertion).execute(new ArrayList<Long>() {
+            {
+                add(tagId);
+            }
+        });
+    }
 
-    private static class insertAsyncTask extends AsyncTask<TagToNote, Void, Void> {
+    private static class insertAsyncTask extends AsyncTask<List<Long>, Void, Void> {
         private TagToNoteDao asyncTagToNoteDao;
+        private AsyncTask<Note, Void, Note> noteInsertion;
 
-        insertAsyncTask(TagToNoteDao dao) {
+        insertAsyncTask(TagToNoteDao dao, AsyncTask<Note, Void, Note> noteInsertion) {
             asyncTagToNoteDao = dao;
+            this.noteInsertion = noteInsertion;
         }
 
         @Override
-        protected Void doInBackground(final TagToNote... params) {
-            asyncTagToNoteDao.insert(params[0]);
+        protected Void doInBackground(final List<Long>... params) {
+            if (noteInsertion != null) {
+                try {
+                    asyncTagToNoteDao.insert(new TagToNote(params[0].get(0), noteInsertion.get().id));
+                } catch (InterruptedException ignored) {
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                asyncTagToNoteDao.insert(new TagToNote(params[0].get(0), params[0].get(1)));
+            }
             return null;
         }
     }

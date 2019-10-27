@@ -21,13 +21,15 @@ public interface TagToNoteDao {
             "ON notes.note_id=tag_to_note.note_id " +
             "WHERE tag_to_note.tag_id=:tagId"
     )
-    LiveData<List<Note>> getNotesByTag(final int tagId);
+    LiveData<List<Note>> getNotesByTag(final long tagId);
 
     @Query("SELECT * FROM tags " +
             "INNER JOIN tag_to_note " +
             "ON tags.tag_id=tag_to_note.tag_id " +
             "WHERE tag_to_note.note_id=:noteId"
     )
-    LiveData<List<Tag>> getTagsFromNote(final int noteId);
+    LiveData<List<Tag>> getTagsFromNote(final long noteId);
 
+    @Query("DELETE FROM tag_to_note")
+    void deleteAll();
 }

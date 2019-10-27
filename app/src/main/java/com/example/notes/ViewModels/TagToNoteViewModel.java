@@ -16,26 +16,17 @@ import java.util.List;
 public class TagToNoteViewModel extends AndroidViewModel {
     private TagToNoteRepository tagToNoteRepository;
 
-    private LiveData<List<Tag>> tagsFromNote;
-    private LiveData<List<Note>> notesByTag;
-
-    public TagToNoteViewModel(@NonNull Application application, int tagId, int noteId) {
+    public TagToNoteViewModel(@NonNull Application application) {
         super(application);
 
-        tagToNoteRepository = new TagToNoteRepository(application, tagId, noteId);
-        tagsFromNote = tagToNoteRepository.getTagsFromNote();
-        notesByTag = tagToNoteRepository.getNotesByTag();
+        tagToNoteRepository = new TagToNoteRepository(application);
     }
 
-    public LiveData<List<Tag>> getTagsFromNote() {
-        return tagsFromNote;
+    public LiveData<List<Tag>> getTagsFromNote(long nodeId) {
+        return tagToNoteRepository.getTagsFromNote(nodeId);
     }
 
-    public LiveData<List<Note>> getNotesByTag(){
-        return notesByTag;
-    }
-
-    public void insert(TagToNote tagToNote) {
-        tagToNoteRepository.insert(tagToNote);
+    public LiveData<List<Note>> getNotesByTag(long tagId){
+        return tagToNoteRepository.getNotesByTag(tagId);
     }
 }

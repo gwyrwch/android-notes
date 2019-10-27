@@ -32,11 +32,11 @@ public class NoteRepository {
         return allNotesByDate;
     }
 
-    public void insert(Note note) {
-        new insertAsyncTask(noteDao).execute(note);
+    public AsyncTask<Note, Void, Note> insert(Note note) {
+        return new insertAsyncTask(noteDao).execute(note);
     }
 
-    private static class insertAsyncTask extends AsyncTask<Note, Void, Void> {
+    private static class insertAsyncTask extends AsyncTask<Note, Void, Note> {
         private NoteDao asyncNoteDao;
 
         insertAsyncTask(NoteDao dao) {
@@ -44,9 +44,9 @@ public class NoteRepository {
         }
 
         @Override
-        protected Void doInBackground(final Note... params) {
-            asyncNoteDao.insert(params[0]);
-            return null;
+        protected Note doInBackground(final Note... params) {
+            params[0].id = asyncNoteDao.insert(params[0]);
+            return params[0];
         }
     }
 

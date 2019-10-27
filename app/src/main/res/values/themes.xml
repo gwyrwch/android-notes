@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <style name="style" parent="android:Theme.Holo.Light">
+        <item name="popupMenuStyle">@style/Widget.MaterialComponents.PopupMenu</item>
+        <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Filter</item>
+    </style>
 </resources>

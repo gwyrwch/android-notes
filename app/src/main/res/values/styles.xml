@@ -19,5 +19,13 @@
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
+<!--    <style name="YOURSTYLE" parent="Widget.AppCompat.PopupMenu">-->
+<!--        <item name="popupMenuStyle">@style/Widget.MaterialComponents.PopupMenu</item>-->
+<!--        <item name="android:textColor">@android:color/white</item>-->
+<!--        <item name="android:itemBackground">@android:color/holo_red_light</item>-->
+
+<!--    </style>-->
+
+
 
 </resources>

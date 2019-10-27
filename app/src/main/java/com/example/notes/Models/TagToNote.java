@@ -17,8 +17,13 @@ import androidx.room.ForeignKey;
         })
 public class TagToNote {
     @ColumnInfo(index = true, name = "tag_id")
-    public int tagId;
+    public long tagId;
     @ColumnInfo(index = true, name = "note_id")
-    public int noteId;
+    public long noteId;
+
+    public TagToNote(final long tagId, final long noteId) {
+        this.tagId = tagId;
+        this.noteId = noteId;
+    }
 }
 

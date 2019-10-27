@@ -17,8 +17,14 @@ public interface TagDao {
     LiveData<List<Tag>> getAllTags();
 
     @Insert
-    void insert(Tag tag);
+    long insert(Tag tag);
 
     @Delete
     void delete(Tag tag);
+
+    @Query("DELETE FROM tags")
+    void deleteAll();
+
+    @Query("SELECT * FROM tags WHERE tagName=:title")
+    Tag getTagByTitle(String title);
 }
