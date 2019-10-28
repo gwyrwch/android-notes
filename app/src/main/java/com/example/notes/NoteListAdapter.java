@@ -1,10 +1,12 @@
 package com.example.notes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +16,7 @@ import com.example.notes.Models.TagToNote;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,15 +38,19 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     private List<Tag> tags;
     private List<TagToNote> tagToNotes;
     private Context context;
+    private View.OnClickListener onClickListener;
 
-    NoteListAdapter(Context context) {
+    NoteListAdapter(Context context, View.OnClickListener onClickListener) {
         inflater = LayoutInflater.from(context);
+        this.onClickListener = onClickListener;
         this.context = context;
     }
 
     @Override
     public NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = inflater.inflate(R.layout.recyclerview_item, parent, false);
+        itemView.setOnClickListener(onClickListener);
+        itemView.setTag(this);
         return new NoteViewHolder(itemView);
     }
 
@@ -59,18 +66,11 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
                 return;
             }
 
-            for (TagToNote tn : this.tagToNotes) {
-                if (tn.noteId == current.id) {
-                    for (Tag tag : this.tags) {
-                        if (tag.id == tn.tagId) {
-                            Chip c = new Chip(context);
-                            c.setText(tag.tagName);
-                            c.setCheckable(false);
-                            holder.tagsGroup.addView(c);
-                        }
-                    }
-                }
-
+            for (String title: getTitlesForNote(current.id)) {
+                Chip c = new Chip(context);
+                c.setText(title);
+                c.setCheckable(false);
+                holder.tagsGroup.addView(c);
             }
         } else {
             // Covers the case of data not being ready yet.
@@ -91,15 +91,32 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         notifyDataSetChanged();
     }
 
-    void getTags(List<Tag> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
         notifyDataSetChanged();
     }
 
 
-    void getFullData(List<TagToNote> tagToNotes) {
+    void setFullData(List<TagToNote> tagToNotes) {
         this.tagToNotes = tagToNotes;
         notifyDataSetChanged();
     }
 
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public ArrayList<String> getTitlesForNote(long noteId) {
+        ArrayList<String> result = new ArrayList<>();
+        for (TagToNote tn : this.tagToNotes) {
+            if (tn.noteId == noteId) {
+                for (Tag tag : this.tags) {
+                    if (tag.id == tn.tagId) {
+                        result.add(tag.tagName);
+                    }
+                }
+            }
+        }
+        return result;
+    }
 }

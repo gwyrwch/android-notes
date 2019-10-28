@@ -34,10 +34,14 @@ import java.util.List;
 public class NoteActivity extends AppCompatActivity {
     public static final String NOTE_TITLE = "title";
     public static final String NOTE_BODY = "body";
+    public static final String NOTE_ID = "note_id";
+    public static final String NOTE_DATE = "added_date";
     public static final String TAGS = "tags";
 
     private EditText editNoteTitleView, editNoteBodyView;
     private PopupMenu popup;
+
+    long currentNoteId;
 
     private TagRecommender tagRecommender;
     private TagViewModel tagViewModel;
@@ -71,6 +75,10 @@ public class NoteActivity extends AppCompatActivity {
                 String body = editNoteBodyView.getText().toString();
                 replyIntent.putExtra(NOTE_BODY, body);
 
+                if (currentNoteId != -1) {
+                    replyIntent.putExtra(NOTE_ID, currentNoteId);
+                }
+
                 replyIntent.putStringArrayListExtra(TAGS, (ArrayList<String>) tagViewModel.selectedTitles);
 
                 setResult(RESULT_OK, replyIntent);
@@ -94,6 +102,18 @@ public class NoteActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Intent intent = getIntent();
+        currentNoteId = intent.getLongExtra(NOTE_ID, -1);
+
+        if (currentNoteId != -1) {
+            editNoteBodyView.setText(intent.getStringExtra(NOTE_BODY));
+            editNoteTitleView.setText(intent.getStringExtra(NOTE_TITLE));
+            ArrayList<String> titles = intent.getStringArrayListExtra(TAGS);
+            for (String title: titles) {
+                onTagSelected(title);
+            }
+        }
 
         editNoteBodyView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -144,11 +164,10 @@ public class NoteActivity extends AppCompatActivity {
                                     title = title.substring("Create new tag ".length());
                                     NoteActivity.this.tagViewModel.insert(new Tag(title));
                                     NoteActivity.this.onTagSelected(title);
-                                    return true;
                                 } else {
                                     NoteActivity.this.onTagSelected(title);
                                 }
-                                return false;
+                                return true;
                             }
                         });
 
@@ -168,9 +187,13 @@ public class NoteActivity extends AppCompatActivity {
         if (!tagViewModel.addNewTitle(title)) {
             return;
         }
+        if (tagRecommender.lastPos != -1) {
+            editNoteBodyView.getText().insert(tagRecommender.lastPos + 1, title.substring(tagRecommender.currentTag().length()));
+        }
+        createChip(title);
+    }
 
-        editNoteBodyView.getText().insert(tagRecommender.lastPos + 1, title.substring(tagRecommender.currentTag().length()));
-
+    private void createChip(String title) {
         ChipGroup cg = findViewById(R.id.chip_group);
         Chip c = new Chip(this);
         c.setText(title);

@@ -50,11 +50,11 @@ public class NoteRepository {
         }
     }
 
-    public void update(Note note) {
-        new updateAsyncTask(noteDao).execute(note);
+    public AsyncTask<Note, Void, Note> update(Note note) {
+        return new updateAsyncTask(noteDao).execute(note);
     }
 
-    private static class updateAsyncTask extends AsyncTask<Note, Void, Void> {
+    private static class updateAsyncTask extends AsyncTask<Note, Void, Note> {
         private NoteDao asyncNoteDao;
 
         updateAsyncTask(NoteDao dao) {
@@ -62,9 +62,9 @@ public class NoteRepository {
         }
 
         @Override
-        protected Void doInBackground(final Note... params) {
+        protected Note doInBackground(final Note... params) {
             asyncNoteDao.update(params[0]);
-            return null;
+            return params[0];
         }
     }
 

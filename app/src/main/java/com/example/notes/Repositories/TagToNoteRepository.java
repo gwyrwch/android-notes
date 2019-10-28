@@ -37,6 +37,25 @@ public class TagToNoteRepository {
         return tagToNoteDao.getFullData();
     }
 
+    public void deleteAllTagsForNote(long noteId) {
+        new deleteByNoteIdAsyncTask(tagToNoteDao).execute(noteId);
+    }
+
+    private static class deleteByNoteIdAsyncTask extends AsyncTask<Long, Void, Void> {
+        private TagToNoteDao asyncTagToNoteDao;
+
+
+        deleteByNoteIdAsyncTask(TagToNoteDao dao) {
+            asyncTagToNoteDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Long... params) {
+            asyncTagToNoteDao.deleteAllTagsForNote(params[0]);
+            return null;
+        }
+    }
+
     public void insert(final long tagId, final long nodeId) {
         new TagToNoteRepository.insertAsyncTask(tagToNoteDao, null).execute(
             new ArrayList<Long>() {

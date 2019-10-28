@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_sort_by_date"
+        app:showAsAction="always"
+        android:icon="@drawable/baseline_date_range_24"
+        android:title="Sort by date"/>
+    <item
+        android:id="@+id/action_sort_by_title"
+        app:showAsAction="always"
+        android:icon="@drawable/baseline_sort_by_alpha_24"
+        android:title="Sort by title"/>
+</menu>

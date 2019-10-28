@@ -21,15 +21,21 @@ import com.example.notes.Models.Tag;
 import com.example.notes.Models.TagToNote;
 import com.example.notes.ViewModels.MainViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends Fragment {
+    public static final int EDIT_NOTE_ACTIVITY_REQUEST_CODE = 2;
+
     private MainViewModel viewModel;
     private View v;
     private OnFragmentInteractionListener mListener;
     protected MyFragmentContext fragmentContext;
+    private RecyclerView recyclerView;
 
     public NoteBaseFragment(MyFragmentContext fragmentContext) {
         this.fragmentContext = fragmentContext;
@@ -45,10 +51,28 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
                              Bundle savedInstanceState) {
 
         v = inflater.inflate(fragmentContext.fragmentId(), container, false);
-        RecyclerView recyclerView = v.findViewById(fragmentContext.recyclerId());
+        recyclerView = v.findViewById(fragmentContext.recyclerId());
         recyclerView.setLayoutManager(fragmentContext.layoutManager(getActivity()));
 
-        final NoteListAdapter adapter = new NoteListAdapter(getActivity());
+
+        final NoteListAdapter adapter = new NoteListAdapter(getActivity(), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int itemPosition = recyclerView.getChildLayoutPosition(v);
+                Note noteClicked = ((NoteListAdapter)v.getTag()).getNotes().get(itemPosition);
+
+                Intent intent = new Intent(getActivity(), NoteActivity.class);
+
+                intent.putExtra(NoteActivity.NOTE_ID, noteClicked.id);
+                intent.putExtra(NoteActivity.NOTE_DATE, noteClicked.addedDate);
+                intent.putExtra(NoteActivity.NOTE_BODY, noteClicked.body);
+                intent.putExtra(NoteActivity.NOTE_TITLE, noteClicked.title);
+                intent.putStringArrayListExtra(NoteActivity.TAGS, ((NoteListAdapter)v.getTag()).getTitlesForNote(noteClicked.id));
+
+                startActivityForResult(intent, EDIT_NOTE_ACTIVITY_REQUEST_CODE);
+            }
+        });
+
         recyclerView.setAdapter(adapter);
 
 
@@ -61,17 +85,31 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
             public void onChanged(@Nullable final List<Tag> allTags) {
                 // Update the cached copy of the notes in the adapter.
                 if (allTags != null) {
-                    adapter.getTags(allTags);
+                    adapter.setTags(allTags);
                 }
+            }
+        });
+
+        viewModel.getAllNotesByTitle().observe(this, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(List<Note> notes) {
+                viewModel.updateIfTitle();
             }
         });
 
         viewModel.getAllNotesByDate().observe(this, new Observer<List<Note>>() {
             @Override
-            public void onChanged(@Nullable final List<Note> adaptedNotes) {
+            public void onChanged(List<Note> notes) {
+                viewModel.updateIfDate();
+            }
+        });
+
+        viewModel.getNotesOnScreen().observe(this, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(@Nullable final List<Note> notes) {
                 // Update the cached copy of the notes in the adapter.
-                if (adaptedNotes != null) {
-                    adapter.setNotes(adaptedNotes);
+                if (notes != null) {
+                    adapter.setNotes(notes);
                 }
             }
         });
@@ -82,7 +120,7 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
                 // Update the cached copy of the notes in the adapter.
                 if (tagToNotes != null) {
 
-                    adapter.getFullData(tagToNotes);
+                    adapter.setFullData(tagToNotes);
                 }
             }
         });
@@ -124,5 +162,17 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == EDIT_NOTE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            Note note = new Note(data.getStringExtra(NoteActivity.NOTE_TITLE), data.getStringExtra(NoteActivity.NOTE_BODY));
+            note.id = data.getLongExtra(NoteActivity.NOTE_ID, -1);
+
+            ArrayList<Tag> tags = new ArrayList<>();
+            for (String title : Objects.requireNonNull(data.getStringArrayListExtra(NoteActivity.TAGS))) {
+                Tag t = viewModel.getTagByTitle(title);
+                tags.add(t);
+            }
+
+            viewModel.update(note, tags);
+        }
     }
 }

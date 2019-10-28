@@ -28,8 +28,15 @@ public class MainViewModel extends AndroidViewModel {
 
     private LiveData<List<Note>> allNotesByTitle;
     private LiveData<List<Note>> allNotesByDate;
+    private final MutableLiveData<List<Note>> notesOnScreen;
     private LiveData<List<TagToNote>> fullData;
     private LiveData<List<Tag>> allTags;
+
+    enum CurrentState {
+        DATE,
+        TITLE
+    }
+    private CurrentState currentState;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -42,18 +49,51 @@ public class MainViewModel extends AndroidViewModel {
         tagToNoteRepository = new TagToNoteRepository(application);
         allTags = tagRepository.getAllTags();
         fullData = tagToNoteRepository.getFullData();
+
+        notesOnScreen = new MutableLiveData<>();
+        currentState = CurrentState.DATE;
+    }
+
+    public void setAllNotesByTitle() {
+        currentState = CurrentState.TITLE;
+        notesOnScreen.setValue(allNotesByTitle.getValue());
     }
 
     public LiveData<List<Note>> getAllNotesByTitle() {
         return allNotesByTitle;
     }
 
+    public void updateIfTitle() {
+        if (currentState == CurrentState.TITLE) {
+            setAllNotesByTitle();
+        }
+    }
+
+    public void setAllNotesByDate() {
+        currentState = CurrentState.DATE;
+        notesOnScreen.setValue(allNotesByDate.getValue());
+    }
+
     public LiveData<List<Note>> getAllNotesByDate() {
         return allNotesByDate;
     }
 
+    public void updateIfDate() {
+        if (currentState == CurrentState.DATE) {
+            setAllNotesByDate();
+        }
+    }
+
+    public MutableLiveData<List<Note>> getNotesOnScreen() {
+        return notesOnScreen;
+    }
+
     public AsyncTask<Note, Void, Note> insertNote(Note note) {
         return noteRepository.insert(note);
+    }
+
+    public AsyncTask<Note, Void, Note> updateNote(Note note) {
+        return noteRepository.update(note);
     }
 
     public void insertTagToNote(long tagId, AsyncTask<Note, Void, Note> noteInsertion) {
@@ -77,6 +117,19 @@ public class MainViewModel extends AndroidViewModel {
         for (Tag t : tags) {
             if (t.id == 0) throw new AssertionError();
             insertTagToNote(t.id, noteInsertion);
+        }
+    }
+
+    private void deleteAllTagsForNote(long nodeId) {
+        tagToNoteRepository.deleteAllTagsForNote(nodeId);
+    }
+
+    public void update(Note note, List<Tag> tags) {
+        AsyncTask<Note, Void, Note> noteUpdate = updateNote(note);
+        deleteAllTagsForNote(note.id);
+        for (Tag t : tags) {
+            if (t.id == 0) throw new AssertionError();
+            insertTagToNote(t.id, noteUpdate);
         }
     }
 

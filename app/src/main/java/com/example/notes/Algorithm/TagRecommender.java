@@ -21,6 +21,7 @@ public class TagRecommender {
     public TagRecommender() {
         input = new StringBuilder();
         tags = null;
+        lastPos = -1;
     }
 
     public List<Tag> recommend() {

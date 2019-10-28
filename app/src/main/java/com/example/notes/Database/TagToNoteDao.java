@@ -37,4 +37,7 @@ public interface TagToNoteDao {
 
     @Query("DELETE FROM tag_to_note")
     void deleteAll();
+
+    @Query("DELETE FROM tag_to_note WHERE tag_to_note.note_id=:nodeId")
+    void deleteAllTagsForNote(long nodeId);
 }

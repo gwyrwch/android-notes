@@ -3,6 +3,8 @@ package com.example.notes;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -37,6 +39,27 @@ public class MainActivity extends AppCompatActivity implements NoteBaseFragment.
                 startActivityForResult(intent, NEW_NOTE_ACTIVITY_REQUEST_CODE);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sort_by_date:
+                viewModel.setAllNotesByDate();
+                break;
+            case R.id.action_sort_by_title:
+                viewModel.setAllNotesByTitle();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
