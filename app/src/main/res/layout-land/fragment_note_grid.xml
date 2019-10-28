@@ -6,11 +6,10 @@
     android:layout_height="match_parent"
     android:background="#FFF"
     tools:context=".NoteListFragment"
-    android:id="@+id/noteListFragment">
-
+    android:id="@+id/noteGridFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+        android:id="@+id/recyclerviewGrid"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#FFF"
@@ -19,7 +18,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/recyclerview_item" />
+        tools:listitem="@layout/recyclerview_grid_item" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

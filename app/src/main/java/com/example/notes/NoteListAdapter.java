@@ -1,6 +1,5 @@
 package com.example.notes;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.notes.Models.AdaptedNote;
 import com.example.notes.Models.Note;
 import com.example.notes.Models.Tag;
 import com.example.notes.Models.TagToNote;
