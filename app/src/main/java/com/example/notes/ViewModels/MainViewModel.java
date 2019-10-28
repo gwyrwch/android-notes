@@ -5,8 +5,13 @@ import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
+import com.example.notes.MainActivity;
+import com.example.notes.Models.AdaptedNote;
 import com.example.notes.Models.Note;
 import com.example.notes.Models.Tag;
 import com.example.notes.Models.TagToNote;
@@ -23,6 +28,8 @@ public class MainViewModel extends AndroidViewModel {
 
     private LiveData<List<Note>> allNotesByTitle;
     private LiveData<List<Note>> allNotesByDate;
+    private LiveData<List<TagToNote>> fullData;
+    private LiveData<List<Tag>> allTags;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -33,6 +40,8 @@ public class MainViewModel extends AndroidViewModel {
 
         tagRepository = new TagRepository(application);
         tagToNoteRepository = new TagToNoteRepository(application);
+        allTags = tagRepository.getAllTags();
+        fullData = tagToNoteRepository.getFullData();
     }
 
     public LiveData<List<Note>> getAllNotesByTitle() {
@@ -55,11 +64,23 @@ public class MainViewModel extends AndroidViewModel {
         return tagRepository.getTagByTitle(title);
     }
 
+    public LiveData<List<Tag>> getAllTags() {
+        return allTags;
+    }
+
+    public LiveData<List<TagToNote>> getFullData() {
+        return fullData;
+    }
+
     public void insert(Note note, List<Tag> tags) {
         AsyncTask<Note, Void, Note> noteInsertion = insertNote(note);
         for (Tag t : tags) {
             if (t.id == 0) throw new AssertionError();
             insertTagToNote(t.id, noteInsertion);
         }
+    }
+
+    public LiveData<List<Tag>> getTagsFromNote(long nodeId) {
+        return tagToNoteRepository.getTagsFromNote(nodeId);
     }
 }

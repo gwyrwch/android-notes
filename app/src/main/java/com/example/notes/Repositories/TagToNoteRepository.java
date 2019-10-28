@@ -4,9 +4,11 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.notes.Database.NoteDatabase;
 import com.example.notes.Database.TagToNoteDao;
+import com.example.notes.Models.AdaptedNote;
 import com.example.notes.Models.Note;
 import com.example.notes.Models.Tag;
 import com.example.notes.Models.TagToNote;
@@ -29,6 +31,10 @@ public class TagToNoteRepository {
 
     public LiveData<List<Note>> getNotesByTag(long tagId) {
         return tagToNoteDao.getNotesByTag(tagId);
+    }
+
+    public LiveData<List<TagToNote>> getFullData() {
+        return tagToNoteDao.getFullData();
     }
 
     public void insert(final long tagId, final long nodeId) {
@@ -74,4 +80,5 @@ public class TagToNoteRepository {
             return null;
         }
     }
+
 }

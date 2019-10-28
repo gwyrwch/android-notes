@@ -81,10 +81,13 @@ public abstract class NoteDatabase extends RoomDatabase {
 
         Tag tag = new Tag("tag1");
         tag.id = tDao.insert(tag);
+        Tag tag2 = new Tag("tag2");
+        tag2.id = tDao.insert(tag2);
 
+        if (note.id == 0 || tag.id == 0) throw new AssertionError();
 
         tnDao.insert(new TagToNote(tag.id, note.id));
-
+        tnDao.insert(new TagToNote(tag2.id, note.id));
         return null;
     }
 }
