@@ -38,11 +38,12 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     private List<Tag> tags;
     private List<TagToNote> tagToNotes;
     private Context context;
-    private View.OnClickListener onClickListener;
+    private View.OnClickListener onClickListener, onTagClickListener;
 
-    NoteListAdapter(Context context, View.OnClickListener onClickListener) {
+    NoteListAdapter(Context context, View.OnClickListener onClickListener, View.OnClickListener onTagClickListener) {
         inflater = LayoutInflater.from(context);
         this.onClickListener = onClickListener;
+        this.onTagClickListener = onTagClickListener;
         this.context = context;
     }
 
@@ -71,6 +72,8 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
                 c.setText(title);
                 c.setCheckable(false);
                 holder.tagsGroup.addView(c);
+                c.setTag(title);
+                c.setOnClickListener(onTagClickListener);
             }
         } else {
             // Covers the case of data not being ready yet.
@@ -82,8 +85,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     public int getItemCount() {
         if (notes != null)
             return notes.size();
-        else return 0; //when it is first called,
-                        // notes has not been updated (means initially, it's null, and we can't return null)
+        else return 0;
     }
 
     void setNotes(List<Note> notes) {

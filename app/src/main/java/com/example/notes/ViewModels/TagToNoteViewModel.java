@@ -22,7 +22,7 @@ public class TagToNoteViewModel extends AndroidViewModel {
         tagToNoteRepository = new TagToNoteRepository(application);
     }
 
-    public LiveData<List<Tag>> getTagsFromNote(long nodeId) {
+    public List<Tag> getTagsFromNote(long nodeId) {
         return tagToNoteRepository.getTagsFromNote(nodeId);
     }
 

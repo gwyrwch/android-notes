@@ -19,6 +19,7 @@ import com.example.notes.Repositories.NoteRepository;
 import com.example.notes.Repositories.TagRepository;
 import com.example.notes.Repositories.TagToNoteRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
@@ -37,6 +38,8 @@ public class MainViewModel extends AndroidViewModel {
         TITLE
     }
     private CurrentState currentState;
+    private String lastFilteredTagTitle;
+
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -52,11 +55,16 @@ public class MainViewModel extends AndroidViewModel {
 
         notesOnScreen = new MutableLiveData<>();
         currentState = CurrentState.DATE;
+        lastFilteredTagTitle = null;
     }
 
     public void setAllNotesByTitle() {
         currentState = CurrentState.TITLE;
         notesOnScreen.setValue(allNotesByTitle.getValue());
+
+        if (lastFilteredTagTitle != null) {
+            displayNotesByTag(lastFilteredTagTitle);
+        }
     }
 
     public LiveData<List<Note>> getAllNotesByTitle() {
@@ -72,6 +80,10 @@ public class MainViewModel extends AndroidViewModel {
     public void setAllNotesByDate() {
         currentState = CurrentState.DATE;
         notesOnScreen.setValue(allNotesByDate.getValue());
+
+        if (lastFilteredTagTitle != null) {
+            displayNotesByTag(lastFilteredTagTitle);
+        }
     }
 
     public LiveData<List<Note>> getAllNotesByDate() {
@@ -112,12 +124,20 @@ public class MainViewModel extends AndroidViewModel {
         return fullData;
     }
 
+    private void dropCurrentState() {
+        lastFilteredTagTitle = null;
+        notesOnScreen.setValue(allNotesByDate.getValue());
+        currentState = CurrentState.DATE;
+    }
+
     public void insert(Note note, List<Tag> tags) {
         AsyncTask<Note, Void, Note> noteInsertion = insertNote(note);
         for (Tag t : tags) {
             if (t.id == 0) throw new AssertionError();
             insertTagToNote(t.id, noteInsertion);
         }
+
+        dropCurrentState();
     }
 
     private void deleteAllTagsForNote(long nodeId) {
@@ -131,9 +151,35 @@ public class MainViewModel extends AndroidViewModel {
             if (t.id == 0) throw new AssertionError();
             insertTagToNote(t.id, noteUpdate);
         }
+
+        dropCurrentState();
     }
 
-    public LiveData<List<Tag>> getTagsFromNote(long nodeId) {
+    public List<Tag> getTagsFromNote(long nodeId) {
         return tagToNoteRepository.getTagsFromNote(nodeId);
+    }
+
+    public void displayNotesByTag(String tagTitle) {
+        if (notesOnScreen.getValue() == null) {
+            return;
+        }
+
+        this.lastFilteredTagTitle = tagTitle;
+
+        List<Note> newNotesToDisplay = new ArrayList<>();
+
+        for (Note n: notesOnScreen.getValue()) {
+            boolean contains = false;
+            for (Tag t: getTagsFromNote(n.id)) {
+                if (t.tagName.equals(tagTitle)) {
+                    contains = true;
+                }
+            }
+            if (contains) {
+                newNotesToDisplay.add(n);
+            }
+        }
+
+        notesOnScreen.setValue(newNotesToDisplay);
     }
 }

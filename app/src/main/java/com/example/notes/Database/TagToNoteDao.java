@@ -29,7 +29,7 @@ public interface TagToNoteDao {
             "ON tags.tag_id=tag_to_note.tag_id " +
             "WHERE tag_to_note.note_id=:noteId"
     )
-    LiveData<List<Tag>> getTagsFromNote(final long noteId);
+    List<Tag> getTagsFromNote(final long noteId);
 
 //        @Query("SELECT * FROM tags INNER JOIN (notes INNER JOIN tag_to_note ON notes.note_id=tag_to_note.note_id) ON tags.tag_id=tag_to_note.tag_id")
     @Query("SELECT * FROM tag_to_note ORDER BY note_id")

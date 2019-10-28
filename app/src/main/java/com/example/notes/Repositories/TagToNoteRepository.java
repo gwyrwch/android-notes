@@ -25,8 +25,28 @@ public class TagToNoteRepository {
         tagToNoteDao = db.tagToNoteDao();
     }
 
-    public LiveData<List<Tag>> getTagsFromNote(long noteId) {
-        return tagToNoteDao.getTagsFromNote(noteId);
+
+    public  List<Tag> getTagsFromNote(long noteId) {
+        try {
+            return new getTagsFromNoteAsyncTask(tagToNoteDao).execute(noteId).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static class getTagsFromNoteAsyncTask extends AsyncTask<Long, Void, List<Tag>> {
+        private TagToNoteDao asyncTagToNoteDao;
+
+
+        getTagsFromNoteAsyncTask(TagToNoteDao dao) {
+            asyncTagToNoteDao = dao;
+        }
+
+        @Override
+        protected List<Tag> doInBackground(final Long... params) {
+            return asyncTagToNoteDao.getTagsFromNote(params[0]);
+        }
     }
 
     public LiveData<List<Note>> getNotesByTag(long tagId) {
