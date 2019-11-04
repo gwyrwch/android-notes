@@ -1,6 +1,7 @@
 package com.example.notes.ViewModels;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -51,4 +52,12 @@ public class TagViewModel extends AndroidViewModel {
     public Tag getTagByTitle(String title) {
         return tagRepository.getTagByTitle(title);
     }
+
+    public boolean deleteTitle(String title) {
+        if (selectedTitles.contains(title)) {
+            return selectedTitles.remove(title);
+        }
+        return false;
+    }
+
 }

@@ -114,6 +114,7 @@ public class NoteActivity extends AppCompatActivity {
             for (String title: titles) {
                 onTagSelected(title);
             }
+            System.out.println(tagViewModel.selectedTitles.size());
         }
 
         editNoteBodyView.addTextChangedListener(new TextWatcher() {
@@ -201,12 +202,22 @@ public class NoteActivity extends AppCompatActivity {
         c.setCheckable(false);
         cg.addView(c);
 
-//        c.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Tag tagToDelete = tagViewModel.getTagByTitle(title);
-//                tagViewModel.delete(tagToDelete);
-//            }
-//        });
+        c.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagViewModel.deleteTitle(title);
+                ChipGroup cg = findViewById(R.id.chip_group);
+                
+                cg.removeAllViews();
+
+                for (int i = 0; i < tagViewModel.selectedTitles.size(); i++) {
+                    Chip c = new Chip(NoteActivity.this);
+                    c.setText(tagViewModel.selectedTitles.get(i));
+                    c.setCheckable(false);
+                    cg.addView(c);
+                }
+
+            }
+        });
     }
 }
