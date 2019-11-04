@@ -11,4 +11,9 @@
         app:showAsAction="always"
         android:icon="@drawable/baseline_sort_by_alpha_24"
         android:title="Sort by title"/>
+    <item
+        android:id="@+id/action_drop"
+        app:showAsAction="always"
+        android:icon="@drawable/baseline_refresh_24"
+        android:title="Drop selecting"/>
 </menu>

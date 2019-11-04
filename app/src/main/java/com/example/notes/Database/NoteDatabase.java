@@ -66,28 +66,28 @@ public abstract class NoteDatabase extends RoomDatabase {
     protected Void doInBackground(final Void... params) {
         // Start the app with a clean database every time.
         // Not needed if you only populate on creation.
-        tnDao.deleteAll();
-        mDao.deleteAll();
-        tDao.deleteAll();
-
-        Note note = new Note("title1", "body1");
-        note.id = mDao.insert(note);
-        note = new Note("title2", "body2");
-        note.id = mDao.insert(note);
-        note = new Note("title3", "body3");
-        note.id = mDao.insert(note);
-        note = new Note("title4", "body4");
-        note.id = mDao.insert(note);
-
-        Tag tag = new Tag("tag1");
-        tag.id = tDao.insert(tag);
-        Tag tag2 = new Tag("tag2");
-        tag2.id = tDao.insert(tag2);
-
-        if (note.id == 0 || tag.id == 0) throw new AssertionError();
-
-        tnDao.insert(new TagToNote(tag.id, note.id));
-        tnDao.insert(new TagToNote(tag2.id, note.id));
+//        tnDao.deleteAll();
+//        mDao.deleteAll();
+//        tDao.deleteAll();
+//
+//        Note note = new Note("title1", "body1");
+//        note.id = mDao.insert(note);
+//        note = new Note("title2", "body2");
+//        note.id = mDao.insert(note);
+//        note = new Note("title3", "body3");
+//        note.id = mDao.insert(note);
+//        note = new Note("title4", "body4");
+//        note.id = mDao.insert(note);
+//
+//        Tag tag = new Tag("tag1");
+//        tag.id = tDao.insert(tag);
+//        Tag tag2 = new Tag("tag2");
+//        tag2.id = tDao.insert(tag2);
+//
+//        if (note.id == 0 || tag.id == 0) throw new AssertionError();
+//
+//        tnDao.insert(new TagToNote(tag.id, note.id));
+//        tnDao.insert(new TagToNote(tag2.id, note.id));
         return null;
     }
 }

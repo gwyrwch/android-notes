@@ -67,6 +67,7 @@ public class NoteActivity extends AppCompatActivity {
         final Button button = findViewById(R.id.button_save);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                // save button OnClickListener
                 Intent replyIntent = new Intent();
 
                 String title = editNoteTitleView.getText().toString();
@@ -193,11 +194,19 @@ public class NoteActivity extends AppCompatActivity {
         createChip(title);
     }
 
-    private void createChip(String title) {
+    private void createChip(final String title) {
         ChipGroup cg = findViewById(R.id.chip_group);
         Chip c = new Chip(this);
         c.setText(title);
         c.setCheckable(false);
         cg.addView(c);
+
+//        c.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Tag tagToDelete = tagViewModel.getTagByTitle(title);
+//                tagViewModel.delete(tagToDelete);
+//            }
+//        });
     }
 }

@@ -4,11 +4,9 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.notes.Database.NoteDatabase;
 import com.example.notes.Database.TagToNoteDao;
-import com.example.notes.Models.AdaptedNote;
 import com.example.notes.Models.Note;
 import com.example.notes.Models.Tag;
 import com.example.notes.Models.TagToNote;

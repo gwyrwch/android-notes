@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements NoteBaseFragment.
             case R.id.action_sort_by_title:
                 viewModel.setAllNotesByTitle();
                 break;
+            case R.id.action_drop:
+                viewModel.dropCurrentState();
+                break;
             default:
                 break;
         }

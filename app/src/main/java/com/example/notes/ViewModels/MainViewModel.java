@@ -124,7 +124,7 @@ public class MainViewModel extends AndroidViewModel {
         return fullData;
     }
 
-    private void dropCurrentState() {
+    public void dropCurrentState() {
         lastFilteredTagTitle = null;
         notesOnScreen.setValue(allNotesByDate.getValue());
         currentState = CurrentState.DATE;
@@ -163,6 +163,9 @@ public class MainViewModel extends AndroidViewModel {
         if (notesOnScreen.getValue() == null) {
             return;
         }
+//        if (allNotesByDate.getValue() == null) {
+//            return;
+//        }
 
         this.lastFilteredTagTitle = tagTitle;
 

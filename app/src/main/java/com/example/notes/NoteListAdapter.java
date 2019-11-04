@@ -1,12 +1,10 @@
 package com.example.notes;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,6 +39,12 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     private View.OnClickListener onClickListener, onTagClickListener;
 
     NoteListAdapter(Context context, View.OnClickListener onClickListener, View.OnClickListener onTagClickListener) {
+        /**
+         @param onClickListener is then set to recyclerview_item
+         @param onTagClickListener is then set to each chip in tagsGroup
+         * they are set in {@link NoteBaseFragment}
+         *
+         */
         inflater = LayoutInflater.from(context);
         this.onClickListener = onClickListener;
         this.onTagClickListener = onTagClickListener;
@@ -67,7 +71,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
                 return;
             }
 
-            for (String title: getTitlesForNote(current.id)) {
+            for (String title: getTagsForNote(current.id)) {
                 Chip c = new Chip(context);
                 c.setText(title);
                 c.setCheckable(false);
@@ -76,8 +80,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
                 c.setOnClickListener(onTagClickListener);
             }
         } else {
-            // Covers the case of data not being ready yet.
-            holder.noteTitleItemView.setText("No notes");
+            holder.noteTitleItemView.setText(R.string.no_notes);
         }
     }
 
@@ -108,7 +111,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         return notes;
     }
 
-    public ArrayList<String> getTitlesForNote(long noteId) {
+    public ArrayList<String> getTagsForNote(long noteId) {
         ArrayList<String> result = new ArrayList<>();
         for (TagToNote tn : this.tagToNotes) {
             if (tn.noteId == noteId) {

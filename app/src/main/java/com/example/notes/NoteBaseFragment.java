@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.notes.FragmentContext.FragmentContext;
+import com.example.notes.FragmentContext.GridFragmentContext;
+import com.example.notes.FragmentContext.ListFragmentContext;
 import com.example.notes.Models.Note;
 import com.example.notes.Models.Tag;
 import com.example.notes.Models.TagToNote;
@@ -27,6 +29,16 @@ import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
+
+/**
+  Template class for the ability to create different versions of fragments
+  with different RecyclerView.LayoutManagers. Now two possible versions are available
+ * @see NoteGridFragment
+ * @see NoteListFragment
+ * Class to use in template must implement {@link FragmentContext}
+ * There are now two types of context:
+ * {@link GridFragmentContext} and {@link ListFragmentContext}
+ */
 
 public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends Fragment {
     public static final int EDIT_NOTE_ACTIVITY_REQUEST_CODE = 2;
@@ -57,6 +69,7 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
 
         final NoteListAdapter adapter = new NoteListAdapter(getActivity(),
                 new View.OnClickListener() {
+                    // when the note in the MainActivity is tapped
                     @Override
                     public void onClick(View v) {
                         int itemPosition = recyclerView.getChildLayoutPosition(v);
@@ -68,12 +81,13 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
                         intent.putExtra(NoteActivity.NOTE_DATE, noteClicked.addedDate);
                         intent.putExtra(NoteActivity.NOTE_BODY, noteClicked.body);
                         intent.putExtra(NoteActivity.NOTE_TITLE, noteClicked.title);
-                        intent.putStringArrayListExtra(NoteActivity.TAGS, ((NoteListAdapter) v.getTag()).getTitlesForNote(noteClicked.id));
+                        intent.putStringArrayListExtra(NoteActivity.TAGS, ((NoteListAdapter) v.getTag()).getTagsForNote(noteClicked.id));
 
                         startActivityForResult(intent, EDIT_NOTE_ACTIVITY_REQUEST_CODE);
                     }
                 },
                 new View.OnClickListener() {
+                    // when the tag in the note item (recyclerview_item) is tapped
                     @Override
                     public void onClick(View v) {
                         String tagTitle = (String)v.getTag();
@@ -83,7 +97,6 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
         );
 
         recyclerView.setAdapter(adapter);
-
 
 
 //        viewModel = ViewModelProviders.of(this).get(MainViewModel.class); //fixme: both variants work why?)))
@@ -128,7 +141,6 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
             public void onChanged(@Nullable final List<TagToNote> tagToNotes) {
                 // Update the cached copy of the notes in the adapter.
                 if (tagToNotes != null) {
-
                     adapter.setFullData(tagToNotes);
                 }
             }
