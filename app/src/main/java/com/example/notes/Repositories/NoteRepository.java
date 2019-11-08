@@ -69,8 +69,9 @@ public class NoteRepository {
     }
 
 
-    public void delete(Note note) {
+    public AsyncTask<Note, Void, Note> delete(Note note) {
         new deleteAsyncTask(noteDao).execute(note);
+        return null;
     }
 
     private static class deleteAsyncTask extends AsyncTask<Note, Void, Void> {

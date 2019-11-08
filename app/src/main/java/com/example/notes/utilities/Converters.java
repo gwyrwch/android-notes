@@ -2,7 +2,6 @@ package com.example.notes.utilities;
 
 import androidx.room.TypeConverter;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Converters {

@@ -2,18 +2,16 @@ package com.example.notes;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.notes.FragmentContext.FragmentContext;
 import com.example.notes.FragmentContext.GridFragmentContext;
@@ -93,6 +91,14 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
                         String tagTitle = (String)v.getTag();
                         viewModel.displayNotesByTag(tagTitle);
                     }
+                },
+                new View.OnClickListener() {
+                    // when delete Note button in the note item (recyclerview_item) is tapped
+                    @Override
+                    public void onClick(View v) {
+                        Note noteToDelete = (Note)v.getTag();
+                        viewModel.delete(noteToDelete);
+                    }
                 }
         );
 
@@ -105,7 +111,6 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
         viewModel.getAllTags().observe(this, new Observer<List<Tag>>() {
             @Override
             public void onChanged(@Nullable final List<Tag> allTags) {
-                // Update the cached copy of the notes in the adapter.
                 if (allTags != null) {
                     adapter.setTags(allTags);
                 }
@@ -139,7 +144,6 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
         viewModel.getFullData().observe(this, new Observer<List<TagToNote>>() {
             @Override
             public void onChanged(@Nullable final List<TagToNote> tagToNotes) {
-                // Update the cached copy of the notes in the adapter.
                 if (tagToNotes != null) {
                     adapter.setFullData(tagToNotes);
                 }
@@ -147,13 +151,6 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
         });
 
         return v;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -175,12 +172,11 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
 
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction();
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == EDIT_NOTE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {

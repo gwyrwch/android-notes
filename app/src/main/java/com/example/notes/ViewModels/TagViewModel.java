@@ -1,20 +1,18 @@
 package com.example.notes.ViewModels;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.notes.Models.Note;
 import com.example.notes.Models.Tag;
-import com.example.notes.Repositories.NoteRepository;
 import com.example.notes.Repositories.TagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+//todo: rename this class
 public class TagViewModel extends AndroidViewModel {
     private TagRepository tagRepository;
     private LiveData<List<Tag>> allTags;

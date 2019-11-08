@@ -1,10 +1,6 @@
 package com.example.notes.Algorithm;
 
-import androidx.lifecycle.Observer;
-
 import com.example.notes.Models.Tag;
-import com.example.notes.Repositories.TagRepository;
-import com.example.notes.ViewModels.TagViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

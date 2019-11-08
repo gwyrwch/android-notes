@@ -1,7 +1,6 @@
 package com.example.notes;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,13 +78,14 @@ public class MainActivity extends AppCompatActivity implements NoteBaseFragment.
 
             viewModel.insert(note, tags);
         } else {
+            System.out.println(requestCode);
             Toast.makeText(
                     getApplicationContext(),
-                    R.string.app_name,
+                    R.string.note_edited,
                     Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) { }
+    public void onFragmentInteraction() { }
 }

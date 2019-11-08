@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,12 +23,14 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView noteTitleItemView, noteBodyItemView;
         private final ChipGroup tagsGroup;
+        private final ImageButton deleteNoteButton;
 
         private NoteViewHolder(View itemView) {
             super(itemView);
             noteTitleItemView = itemView.findViewById(R.id.titleTextView);
             noteBodyItemView = itemView.findViewById(R.id.bodyTextView);
             tagsGroup = itemView.findViewById(R.id.tagsGroup);
+            deleteNoteButton = itemView.findViewById(R.id.delete_note);
         }
     }
 
@@ -36,9 +39,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     private List<Tag> tags;
     private List<TagToNote> tagToNotes;
     private Context context;
-    private View.OnClickListener onClickListener, onTagClickListener;
+    private View.OnClickListener onClickListener, onTagClickListener, onDeleteNoteClickListener;
 
-    NoteListAdapter(Context context, View.OnClickListener onClickListener, View.OnClickListener onTagClickListener) {
+    NoteListAdapter(Context context, View.OnClickListener onClickListener,
+                    View.OnClickListener onTagClickListener, View.OnClickListener onDeleteNoteClickListener) {
         /**
          @param onClickListener is then set to recyclerview_item
          @param onTagClickListener is then set to each chip in tagsGroup
@@ -48,6 +52,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         inflater = LayoutInflater.from(context);
         this.onClickListener = onClickListener;
         this.onTagClickListener = onTagClickListener;
+        this.onDeleteNoteClickListener = onDeleteNoteClickListener;
         this.context = context;
     }
 
@@ -62,16 +67,16 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int position) {
         if (notes != null) {
-            Note current = notes.get(position);
-            holder.noteTitleItemView.setText(current.title);
-            holder.noteBodyItemView.setText(current.body);
+            Note currentNote = notes.get(position);
+            holder.noteTitleItemView.setText(currentNote.title);
+            holder.noteBodyItemView.setText(currentNote.body);
             holder.tagsGroup.removeAllViews();
 
             if (this.tagToNotes == null) {
                 return;
             }
 
-            for (String title: getTagsForNote(current.id)) {
+            for (String title: getTagsForNote(currentNote.id)) {
                 Chip c = new Chip(context);
                 c.setText(title);
                 c.setCheckable(false);
@@ -79,6 +84,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
                 c.setTag(title);
                 c.setOnClickListener(onTagClickListener);
             }
+
+            holder.deleteNoteButton.setOnClickListener(onDeleteNoteClickListener);
+            holder.deleteNoteButton.setTag(currentNote);
+
         } else {
             holder.noteTitleItemView.setText(R.string.no_notes);
         }

@@ -2,6 +2,7 @@ package com.example.notes.Database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -40,4 +41,7 @@ public interface TagToNoteDao {
 
     @Query("DELETE FROM tag_to_note WHERE tag_to_note.note_id=:nodeId")
     void deleteAllTagsForNote(long nodeId);
+
+    @Delete
+    void deleteTagsForNote(TagToNote tagToNote);
 }

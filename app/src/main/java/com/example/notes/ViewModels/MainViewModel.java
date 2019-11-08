@@ -5,13 +5,9 @@ import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
-import com.example.notes.MainActivity;
-import com.example.notes.Models.AdaptedNote;
 import com.example.notes.Models.Note;
 import com.example.notes.Models.Tag;
 import com.example.notes.Models.TagToNote;
@@ -108,6 +104,8 @@ public class MainViewModel extends AndroidViewModel {
         return noteRepository.update(note);
     }
 
+    public AsyncTask<Note, Void, Note> deleteNote(Note note) {return noteRepository.delete(note);}
+
     public void insertTagToNote(long tagId, AsyncTask<Note, Void, Note> noteInsertion) {
         tagToNoteRepository.insert(tagId, noteInsertion);
     }
@@ -155,6 +153,13 @@ public class MainViewModel extends AndroidViewModel {
         dropCurrentState();
     }
 
+    public void delete(Note note) {
+        deleteAllTagsForNote(note.id);
+        deleteNote(note);
+
+        dropCurrentState();
+    }
+
     public List<Tag> getTagsFromNote(long nodeId) {
         return tagToNoteRepository.getTagsFromNote(nodeId);
     }
@@ -163,9 +168,6 @@ public class MainViewModel extends AndroidViewModel {
         if (notesOnScreen.getValue() == null) {
             return;
         }
-//        if (allNotesByDate.getValue() == null) {
-//            return;
-//        }
 
         this.lastFilteredTagTitle = tagTitle;
 

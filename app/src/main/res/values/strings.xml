@@ -3,6 +3,7 @@
     <string name="note_title">Title</string>
     <string name="note_body">Note</string>
     <string name="no_notes">No notes</string>
+    <string name="note_edited">note edited</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

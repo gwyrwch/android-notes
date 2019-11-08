@@ -1,33 +1,28 @@
 package com.example.notes;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.example.notes.Algorithm.TagRecommender;
-import com.example.notes.Models.Note;
 import com.example.notes.Models.Tag;
-import com.example.notes.ViewModels.NoteViewModel;
 import com.example.notes.ViewModels.TagViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +63,14 @@ public class NoteActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // save button OnClickListener
+                /**
+                 Reply intent goes with the one of the possible ways
+                 * @see NoteBaseFragment#onActivityResult(int, int, Intent)
+                 * when NoteActivity was started with {@link NoteBaseFragment.EDIT_NOTE_ACTIVITY_REQUEST_CODE}
+                 * or
+                 * @see MainActivity#onActivityResult(int, int, Intent)
+                 * when NoteActivity was started with {@link MainActivity.NEW_NOTE_ACTIVITY_REQUEST_CODE}
+                 */
                 Intent replyIntent = new Intent();
 
                 String title = editNoteTitleView.getText().toString();
@@ -90,12 +93,12 @@ public class NoteActivity extends AppCompatActivity {
         popup = new PopupMenu(NoteActivity.this, editNoteBodyView);
         popup.getMenuInflater().inflate(R.menu.tag_menu, popup.getMenu());
 
-        final TextInputLayout textLayout = findViewById(R.id.textInputLayout2);
+        final TextInputLayout textLayout = findViewById(R.id.textInputLayout2); //todo: rename it
         textLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editNoteBodyView.requestFocus();
-                System.out.println("OPen clava");
+                System.out.println("Keyboard opened"); //todo:make logs or remove it
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     // shows keyboard
@@ -104,6 +107,8 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
+
+        // when Note activity starts with EDIT_NOTE_ACTIVITY_REQUEST_CODE
         Intent intent = getIntent();
         currentNoteId = intent.getLongExtra(NOTE_ID, -1);
 
@@ -111,11 +116,14 @@ public class NoteActivity extends AppCompatActivity {
             editNoteBodyView.setText(intent.getStringExtra(NOTE_BODY));
             editNoteTitleView.setText(intent.getStringExtra(NOTE_TITLE));
             ArrayList<String> titles = intent.getStringArrayListExtra(TAGS);
-            for (String title: titles) {
-                onTagSelected(title);
+            if (titles != null) {
+                for (String title : titles) {
+                    onTagSelected(title);
+                }
             }
             System.out.println(tagViewModel.selectedTitles.size());
         }
+
 
         editNoteBodyView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -131,7 +139,6 @@ public class NoteActivity extends AppCompatActivity {
                 if (count - before == 1) {
                     start += before;
                     if (start >= s.length()) {
-                        System.out.println("WAAAT");
                         return;
                     }
                     TagRecommender tr = NoteActivity.this.tagRecommender;
@@ -205,17 +212,17 @@ public class NoteActivity extends AppCompatActivity {
         c.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tagViewModel.deleteTitle(title);
-                ChipGroup cg = findViewById(R.id.chip_group);
-                
-                cg.removeAllViews();
+            tagViewModel.deleteTitle(title);
+            ChipGroup cg = findViewById(R.id.chip_group);
 
-                for (int i = 0; i < tagViewModel.selectedTitles.size(); i++) {
-                    Chip c = new Chip(NoteActivity.this);
-                    c.setText(tagViewModel.selectedTitles.get(i));
-                    c.setCheckable(false);
-                    cg.addView(c);
-                }
+            cg.removeAllViews();
+
+            for (int i = 0; i < tagViewModel.selectedTitles.size(); i++) {
+                Chip c = new Chip(NoteActivity.this);
+                c.setText(tagViewModel.selectedTitles.get(i));
+                c.setCheckable(false);
+                cg.addView(c);
+            }
 
             }
         });

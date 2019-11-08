@@ -25,7 +25,7 @@ public interface NoteDao {
     @Query("SELECT * FROM notes ORDER BY notes.title")
     LiveData<List<Note>> sortByTitle();
 
-    @Query("SELECT * FROM notes ORDER BY notes.addedDate")
+    @Query("SELECT * FROM notes ORDER BY notes.addedDate DESC")
     LiveData<List<Note>> sortByDate();
 
     // fixme: maybe delete this code

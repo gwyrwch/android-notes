@@ -47,10 +47,6 @@ public class TagToNoteRepository {
         }
     }
 
-    public LiveData<List<Note>> getNotesByTag(long tagId) {
-        return tagToNoteDao.getNotesByTag(tagId);
-    }
-
     public LiveData<List<TagToNote>> getFullData() {
         return tagToNoteDao.getFullData();
     }
@@ -76,21 +72,23 @@ public class TagToNoteRepository {
 
     public void insert(final long tagId, final long nodeId) {
         new TagToNoteRepository.insertAsyncTask(tagToNoteDao, null).execute(
-            new ArrayList<Long>() {
-                {
-                    add(tagId);
-                    add(nodeId);
+                new ArrayList<Long>() {
+                    {
+                        add(tagId);
+                        add(nodeId);
+                    }
                 }
-            }
         );
     }
 
     public void insert(final long tagId, AsyncTask<Note, Void, Note> noteInsertion) {
-        new TagToNoteRepository.insertAsyncTask(tagToNoteDao, noteInsertion).execute(new ArrayList<Long>() {
-            {
-                add(tagId);
-            }
-        });
+        new TagToNoteRepository.insertAsyncTask(tagToNoteDao, noteInsertion).execute(
+                new ArrayList<Long>() {
+                    {
+                        add(tagId);
+                    }
+                }
+        );
     }
 
     private static class insertAsyncTask extends AsyncTask<List<Long>, Void, Void> {
@@ -117,5 +115,8 @@ public class TagToNoteRepository {
             return null;
         }
     }
+
+
+
 
 }

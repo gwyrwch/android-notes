@@ -22,7 +22,6 @@ public abstract class NoteDatabase extends RoomDatabase {
     public abstract TagDao tagDao();
     public abstract TagToNoteDao tagToNoteDao();
 
-
     private static volatile NoteDatabase INSTANCE;
 
     public static NoteDatabase getDatabase(final Context context) {

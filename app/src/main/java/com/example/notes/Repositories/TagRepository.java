@@ -9,7 +9,6 @@ import com.example.notes.Database.NoteDatabase;
 import com.example.notes.Database.TagDao;
 import com.example.notes.Models.Tag;
 
-import java.io.Console;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
