@@ -62,31 +62,31 @@ public class NoteActivity extends AppCompatActivity {
         final Button button = findViewById(R.id.button_save);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                // save button OnClickListener
-                /**
-                 Reply intent goes with the one of the possible ways
-                 * @see NoteBaseFragment#onActivityResult(int, int, Intent)
-                 * when NoteActivity was started with {@link NoteBaseFragment.EDIT_NOTE_ACTIVITY_REQUEST_CODE}
-                 * or
-                 * @see MainActivity#onActivityResult(int, int, Intent)
-                 * when NoteActivity was started with {@link MainActivity.NEW_NOTE_ACTIVITY_REQUEST_CODE}
-                 */
-                Intent replyIntent = new Intent();
+            // save button OnClickListener
+            /**
+             Reply intent goes with the one of the possible ways
+             * @see NoteBaseFragment#onActivityResult(int, int, Intent)
+             * when NoteActivity was started with {@link NoteBaseFragment.EDIT_NOTE_ACTIVITY_REQUEST_CODE}
+             * or
+             * @see MainActivity#onActivityResult(int, int, Intent)
+             * when NoteActivity was started with {@link MainActivity.NEW_NOTE_ACTIVITY_REQUEST_CODE}
+             */
+            Intent replyIntent = new Intent();
 
-                String title = editNoteTitleView.getText().toString();
-                replyIntent.putExtra(NOTE_TITLE, title);
+            String title = editNoteTitleView.getText().toString();
+            replyIntent.putExtra(NOTE_TITLE, title);
 
-                String body = editNoteBodyView.getText().toString();
-                replyIntent.putExtra(NOTE_BODY, body);
+            String body = editNoteBodyView.getText().toString();
+            replyIntent.putExtra(NOTE_BODY, body);
 
-                if (currentNoteId != -1) {
-                    replyIntent.putExtra(NOTE_ID, currentNoteId);
-                }
+            if (currentNoteId != -1) {
+                replyIntent.putExtra(NOTE_ID, currentNoteId);
+            }
 
-                replyIntent.putStringArrayListExtra(TAGS, (ArrayList<String>) tagViewModel.selectedTitles);
+            replyIntent.putStringArrayListExtra(TAGS, (ArrayList<String>) tagViewModel.selectedTitles);
 
-                setResult(RESULT_OK, replyIntent);
-                finish(); // exit NoteActivity
+            setResult(RESULT_OK, replyIntent);
+            finish(); // exit NoteActivity
             }
         });
 
@@ -206,7 +206,8 @@ public class NoteActivity extends AppCompatActivity {
         ChipGroup cg = findViewById(R.id.chip_group);
         Chip c = new Chip(this);
         c.setText(title);
-        c.setCheckable(false);
+        c.setCheckable(true);
+        c.setCloseIconVisible(true);
         cg.addView(c);
 
         c.setOnClickListener(new View.OnClickListener() {
@@ -220,7 +221,9 @@ public class NoteActivity extends AppCompatActivity {
             for (int i = 0; i < tagViewModel.selectedTitles.size(); i++) {
                 Chip c = new Chip(NoteActivity.this);
                 c.setText(tagViewModel.selectedTitles.get(i));
-                c.setCheckable(false);
+                c.setCheckable(true);
+                c.setCloseIconVisible(true);
+
                 cg.addView(c);
             }
 

@@ -66,40 +66,40 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
 
 
         final NoteListAdapter adapter = new NoteListAdapter(getActivity(),
-                new View.OnClickListener() {
-                    // when the note in the MainActivity is tapped
-                    @Override
-                    public void onClick(View v) {
-                        int itemPosition = recyclerView.getChildLayoutPosition(v);
-                        Note noteClicked = ((NoteListAdapter) v.getTag()).getNotes().get(itemPosition);
+            new View.OnClickListener() {
+                // when the note in the MainActivity is tapped
+                @Override
+                public void onClick(View v) {
+                    int itemPosition = recyclerView.getChildLayoutPosition(v);
+                    Note noteClicked = ((NoteListAdapter) v.getTag()).getNotes().get(itemPosition);
 
-                        Intent intent = new Intent(getActivity(), NoteActivity.class);
+                    Intent intent = new Intent(getActivity(), NoteActivity.class);
 
-                        intent.putExtra(NoteActivity.NOTE_ID, noteClicked.id);
-                        intent.putExtra(NoteActivity.NOTE_DATE, noteClicked.addedDate);
-                        intent.putExtra(NoteActivity.NOTE_BODY, noteClicked.body);
-                        intent.putExtra(NoteActivity.NOTE_TITLE, noteClicked.title);
-                        intent.putStringArrayListExtra(NoteActivity.TAGS, ((NoteListAdapter) v.getTag()).getTagsForNote(noteClicked.id));
+                    intent.putExtra(NoteActivity.NOTE_ID, noteClicked.id);
+                    intent.putExtra(NoteActivity.NOTE_DATE, noteClicked.addedDate);
+                    intent.putExtra(NoteActivity.NOTE_BODY, noteClicked.body);
+                    intent.putExtra(NoteActivity.NOTE_TITLE, noteClicked.title);
+                    intent.putStringArrayListExtra(NoteActivity.TAGS, ((NoteListAdapter) v.getTag()).getTagsForNote(noteClicked.id));
 
-                        startActivityForResult(intent, EDIT_NOTE_ACTIVITY_REQUEST_CODE);
-                    }
-                },
-                new View.OnClickListener() {
-                    // when the tag in the note item (recyclerview_item) is tapped
-                    @Override
-                    public void onClick(View v) {
-                        String tagTitle = (String)v.getTag();
-                        viewModel.displayNotesByTag(tagTitle);
-                    }
-                },
-                new View.OnClickListener() {
-                    // when delete Note button in the note item (recyclerview_item) is tapped
-                    @Override
-                    public void onClick(View v) {
-                        Note noteToDelete = (Note)v.getTag();
-                        viewModel.delete(noteToDelete);
-                    }
+                    startActivityForResult(intent, EDIT_NOTE_ACTIVITY_REQUEST_CODE);
                 }
+            },
+            new View.OnClickListener() {
+                // when the tag in the note item (recyclerview_item) is tapped
+                @Override
+                public void onClick(View v) {
+                    String tagTitle = (String)v.getTag();
+                    viewModel.displayNotesByTag(tagTitle);
+                }
+            },
+            new View.OnClickListener() {
+                // when delete Note button in the note item (recyclerview_item) is tapped
+                @Override
+                public void onClick(View v) {
+                    Note noteToDelete = (Note)v.getTag();
+                    viewModel.delete(noteToDelete);
+                }
+            }
         );
 
         recyclerView.setAdapter(adapter);
