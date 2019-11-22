@@ -96,17 +96,19 @@ public class MainViewModel extends AndroidViewModel {
         return notesOnScreen;
     }
 
-    public AsyncTask<Note, Void, Note> insertNote(Note note) {
+    private AsyncTask<Note, Void, Note> insertNote(Note note) {
         return noteRepository.insert(note);
     }
 
-    public AsyncTask<Note, Void, Note> updateNote(Note note) {
+    private AsyncTask<Note, Void, Note> updateNote(Note note) {
         return noteRepository.update(note);
     }
 
-    public AsyncTask<Note, Void, Note> deleteNote(Note note) {return noteRepository.delete(note);}
+    private void deleteNote(Note note) {
+        noteRepository.delete(note);
+    }
 
-    public void insertTagToNote(long tagId, AsyncTask<Note, Void, Note> noteInsertion) {
+    private void insertTagToNote(long tagId, AsyncTask<Note, Void, Note> noteInsertion) {
         tagToNoteRepository.insert(tagId, noteInsertion);
     }
 
@@ -160,7 +162,7 @@ public class MainViewModel extends AndroidViewModel {
         dropCurrentState();
     }
 
-    public List<Tag> getTagsFromNote(long nodeId) {
+    private List<Tag> getTagsFromNote(long nodeId) {
         return tagToNoteRepository.getTagsFromNote(nodeId);
     }
 

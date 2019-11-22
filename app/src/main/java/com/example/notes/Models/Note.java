@@ -27,7 +27,6 @@ public class Note {
         Date currentTime = Calendar.getInstance().getTime();
         this.addedDate = currentTime;
 
-        // fixme: null cannot be passed?
         if (title == null || title.isEmpty()) {
             SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
             this.title = df.format(currentTime);

@@ -1,4 +1,4 @@
-package com.example.notes.utilities;
+package com.example.notes.Utilities;
 
 import androidx.room.TypeConverter;
 

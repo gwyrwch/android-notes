@@ -28,7 +28,6 @@ public interface NoteDao {
     @Query("SELECT * FROM notes ORDER BY notes.addedDate DESC")
     LiveData<List<Note>> sortByDate();
 
-    // fixme: maybe delete this code
     @Query("DELETE FROM notes")
     void deleteAll();
 }

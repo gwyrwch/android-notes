@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,6 +50,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         /**
          @param onClickListener is then set to recyclerview_item
          @param onTagClickListener is then set to each chip in tagsGroup
+         @param onDeleteNoteClickListener is then set to deleteNote button in recyclerview_item
          * they are set in {@link NoteBaseFragment}
          *
          */
@@ -58,6 +60,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         this.onDeleteNoteClickListener = onDeleteNoteClickListener;
         this.context = context;
     }
+
 
     @Override
     public NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -124,7 +127,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         return notes;
     }
 
-    public ArrayList<String> getTagsForNote(long noteId) {
+    ArrayList<String> getTagsForNote(long noteId) {
         ArrayList<String> result = new ArrayList<>();
         for (TagToNote tn : this.tagToNotes) {
             if (tn.noteId == noteId) {

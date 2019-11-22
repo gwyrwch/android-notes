@@ -105,7 +105,6 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
         recyclerView.setAdapter(adapter);
 
 
-//        viewModel = ViewModelProviders.of(this).get(MainViewModel.class); //fixme: both variants work why?)))
         viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MainViewModel.class);
 
         viewModel.getAllTags().observe(this, new Observer<List<Tag>>() {
