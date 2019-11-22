@@ -49,12 +49,12 @@ public abstract class NoteDatabase extends RoomDatabase {
     };
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-        private final NoteDao mDao;
+        private final NoteDao nDao;
         private final TagDao tDao;
         private final TagToNoteDao tnDao;
 
         PopulateDbAsync(NoteDatabase db) {
-            mDao = db.noteDao();
+            nDao = db.noteDao();
             tDao = db.tagDao();
             tnDao = db.tagToNoteDao();
         }
@@ -62,9 +62,9 @@ public abstract class NoteDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(final Void... params) {
 
-    //        tnDao.deleteAll();
-    //        mDao.deleteAll();
-    //        tDao.deleteAll();
+//            tnDao.deleteAll();
+//            nDao.deleteAll();
+//            tDao.deleteAll();
     //
     //        Note note = new Note("title1", "body1");
     //        note.id = mDao.insert(note);

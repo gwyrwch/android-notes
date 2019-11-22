@@ -98,7 +98,6 @@ public class NoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editNoteBodyView.requestFocus();
-                System.out.println("Keyboard opened"); //todo:make logs or remove it
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     // shows keyboard
@@ -221,7 +220,6 @@ public class NoteActivity extends AppCompatActivity {
             for (int i = 0; i < tagViewModel.selectedTitles.size(); i++) {
                 Chip c = new Chip(NoteActivity.this);
                 c.setText(tagViewModel.selectedTitles.get(i));
-                c.setCheckable(true);
                 c.setCloseIconVisible(true);
 
                 cg.addView(c);

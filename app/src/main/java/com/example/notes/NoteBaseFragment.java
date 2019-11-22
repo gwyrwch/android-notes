@@ -165,8 +165,8 @@ public class NoteBaseFragment<MyFragmentContext extends FragmentContext> extends
 
     @Override
     public void onDetach() {
-        super.onDetach();
         mListener = null;
+        super.onDetach();
     }
 
 
